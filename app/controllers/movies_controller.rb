@@ -8,15 +8,18 @@ class MoviesController < ApplicationController
 
   def index
     @myString = params
-
+	@th_title_class = "normal"
+	@th_release_date_class = "normal"
 	
 	case params[:sort]
     when "title"
         @myString ="title"
         @movies = Movie.order("title ASC")
+        @th_title_class = "hilite"
     when "release date"
         @myString ="release date"
         @movies = Movie.order("release_date ASC")
+        @th_release_date_class = "hilite"
     else
         @movies = Movie.all
     end
