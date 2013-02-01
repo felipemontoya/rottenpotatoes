@@ -7,6 +7,7 @@ class MoviesController < ApplicationController
   end
 
   def index
+    #HW2
     @myString = params
 	@th_title_class = "normal"
 	@th_release_date_class = "normal"
@@ -23,6 +24,9 @@ class MoviesController < ApplicationController
     else
         @movies = Movie.all
     end
+    
+    #HW3
+    @all_ratings = Movie.ratings
   end
 
   def new
