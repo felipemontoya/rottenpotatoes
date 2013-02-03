@@ -11,9 +11,9 @@
 %table#movies
   %thead
     %tr
-      %th{:class => @th_title_class }= link_to( 'Movie Title' , movies_path({:sort => 'title'}), {:id => 'title_header'})
+      %th{:class => @th_title_class }= link_to( 'Movie Title' , movies_path({:sort => 'title'}) + @mySortString, {:id => 'title_header'})
       %th Rating
-      %th{:class => @th_release_date_class }= link_to( 'Release Date' , movies_path({:sort => 'release date'}), {:id => 'release_date_header'})
+      %th{:class => @th_release_date_class }= link_to( 'Release Date' , movies_path({:sort => 'release date'})+ @mySortString, {:id => 'release_date_header'})
       %th More Info
   %tbody
     - @movies.each do |movie|

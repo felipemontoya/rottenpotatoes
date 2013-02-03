@@ -20,14 +20,7 @@ class MoviesController < ApplicationController
         query_rating_params = {:rating => ratings}
     else
         query_rating_params = {}
-        @used_ratings = {}
-    end
-    
-    @all_ratings.each do |rat|
-        puts rat
-        if (params[:ratings] != nil)
-            puts @used_ratings.has_key?(rat)
-        end
+        @used_ratings = Hash[@all_ratings.map {|v| [v,1]}]
     end
         
 
@@ -35,6 +28,13 @@ class MoviesController < ApplicationController
     @myString = params
 	@th_title_class = "normal"
 	@th_release_date_class = "normal"
+
+    @mySortString = ""
+	if (params[:ratings])
+	    params[:ratings].each do |rat| 
+	        @mySortString << "&ratings[" << rat[0] << "]=" << rat[1]
+	    end
+	end
 	
 	case params[:sort]
     when "title"
