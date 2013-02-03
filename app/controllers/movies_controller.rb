@@ -1,3 +1,5 @@
+require 'pp'
+
 class MoviesController < ApplicationController
 
   def show
@@ -7,6 +9,19 @@ class MoviesController < ApplicationController
   end
 
   def index
+    
+    #HW3
+    @all_ratings = Movie.ratings
+    
+    @used_ratings = params[:ratings]
+    
+    if (params[:ratings] != nil)
+        ratings = params[:ratings].keys
+        query_rating_params = {:rating => ratings}
+    else
+        query_rating_params = {}
+    end
+
     #HW2
     @myString = params
 	@th_title_class = "normal"
@@ -15,18 +30,21 @@ class MoviesController < ApplicationController
 	case params[:sort]
     when "title"
         @myString ="title"
-        @movies = Movie.order("title ASC")
+        @movies = Movie.where(query_rating_params).order("title ASC")
         @th_title_class = "hilite"
     when "release date"
         @myString ="release date"
-        @movies = Movie.order("release_date ASC")
+        @movies = Movie.where(query_rating_params).order("release_date ASC")
         @th_release_date_class = "hilite"
     else
-        @movies = Movie.all
+        @movies = Movie.where(query_rating_params)
     end
     
-    #HW3
-    @all_ratings = Movie.ratings
+    
+    #test: should not be there, because it overrides everything
+#        @movies = Movie.where({}).order("title ASC")
+#        @movies = Movie.where(:rating => ['R']).order("title ASC")
+
   end
 
   def new
