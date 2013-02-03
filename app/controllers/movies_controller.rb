@@ -9,6 +9,11 @@ class MoviesController < ApplicationController
   end
 
   def index
+    if params.has_key?(:ratings)
+        save_params_in_session(params)
+    else
+        restore_session_params_by_redirect
+    end
     
     #HW3
     @all_ratings = Movie.ratings
@@ -26,6 +31,7 @@ class MoviesController < ApplicationController
 
     #HW2
     @myString = params
+    @mySession = session
 	@th_title_class = "normal"
 	@th_release_date_class = "normal"
 
@@ -38,11 +44,9 @@ class MoviesController < ApplicationController
 	
 	case params[:sort]
     when "title"
-        @myString ="title"
         @movies = Movie.where(query_rating_params).order("title ASC")
         @th_title_class = "hilite"
     when "release date"
-        @myString ="release date"
         @movies = Movie.where(query_rating_params).order("release_date ASC")
         @th_release_date_class = "hilite"
     else
@@ -82,6 +86,45 @@ class MoviesController < ApplicationController
     @movie.destroy
     flash[:notice] = "Movie '#{@movie.title}' deleted."
     redirect_to movies_path
+  end
+  
+  def save_params_in_session(params)
+    session[:params] = params
+  end
+  
+  def restore_session_params_by_redirect
+    params = session[:params]
+    
+    url = ""
+    params.each do |par|
+        case par[0]
+        when 'ratings'
+            puts 'ratings**'
+            puts par
+            
+            par[1].each do |rat|
+                url << "ratings[" << rat[0] << "]=" << rat[1] << "&"
+            end
+            
+        when 'controller'
+        when 'action'
+        when 'commit'
+        when 'utf8'
+        else
+            url << par[0] << "=" << par[1] << "&"
+        end
+    end
+    
+    
+    url.gsub!(" ","+")
+    #flash.keep
+    #redirect_to
+    
+    redirect = movies_path << "?" << url
+    puts redirect
+    
+    flash.keep
+    redirect_to redirect
   end
 
 end
