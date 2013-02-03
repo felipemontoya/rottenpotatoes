@@ -12,7 +12,9 @@ class MoviesController < ApplicationController
     if params.has_key?(:ratings)
         save_params_in_session(params)
     else
-        restore_session_params_by_redirect
+        if session[:params]
+            restore_session_params_by_redirect
+        end
     end
     
     #HW3
