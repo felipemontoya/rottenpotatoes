@@ -20,7 +20,16 @@ class MoviesController < ApplicationController
         query_rating_params = {:rating => ratings}
     else
         query_rating_params = {}
+        @used_ratings = {}
     end
+    
+    @all_ratings.each do |rat|
+        puts rat
+        if (params[:ratings] != nil)
+            puts @used_ratings.has_key?(rat)
+        end
+    end
+        
 
     #HW2
     @myString = params
